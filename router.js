@@ -6,8 +6,15 @@ const db = require('./db');
 const date = new Date();
 //new message handeeler
 router.post('/hello', (req, res)=>{
-    res.send('hello world');
-    console.log(req.body.msg);
+    console.log(`ids from messages: ${req.body.id}`)
+    if (!global[req.body.id]) {
+    global[req.body.id] = new Array();
+        console.log(`${req.body.id}: ${global[req.body.id][0]} new array created`)
+    }
+    global[req.body.id].push(req.body.msg);
+    //console.log(`${req.body.id}: ${global[req.body.id][0]} new array created`)
+    res.send("ok got the message")
+    //console.log(req.body.msg);
 })
 //receiving id 
 router.post('/idrec', async (req, res)=>{
@@ -34,11 +41,20 @@ router.get('/id', (req, res)=>{
         console.log('some error in db insertion');
     }
     })
-    
 })
 //polling
 router.post('/poll', (req, res)=>{
 //    console.log('called me');
-    res.send('ok got it')
+    console.log(`from poll: ${req.body.idpoll} : ${global[req.body.idpoll]}`)
+    if (global[req.body.idpoll]) {
+        if (global[req.body.idpoll].length > 0) {
+            console.log(`${global[req.body.idpoll].length} messages pending`)
+        }
+        res.json({array : global[req.body.idpoll]})
+        global[req.body.idpoll] = null;
+        
+    } else 
+        res.send(null)
+
 })
 module.exports = router

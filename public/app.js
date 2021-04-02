@@ -3,7 +3,8 @@ async function clickhan() {
     console.log(msgele.value);
     addhtml(msgele.value);
     let obj = {
-        msg : msgele.value
+        msg : msgele.value,
+        id : idspele.innerHTML,
     }
     let promise = await fetch('/hello', {
         method: 'POST',
@@ -46,17 +47,46 @@ async function sendid() {
         },
         body : JSON.stringify(obj),
     });
+    const res = await sendiid.text();
+    if (res) {
+        idspele.innerHTML = idval;
+    }
     console.log(await sendiid.text())
 }
 
 
 setInterval(async ()=>{
+    let obj = {
+        idpoll : idspele.innerHTML,
+    }
     let posreq = await fetch('/poll', {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+        },
+        body : JSON.stringify(obj),
     });
-    console.log(await posreq.text());
+    const data = await posreq.json();
+    if (!data) {
+        console.log('null')
+    } else {
+        data.array.forEach(element => {
+            rechtml(element)
+        });
+//        console.log(finarr.array);
+//        let obj = JSON.parse(data);
+ //       console.log(obj.array);
+//        console.log(finarr[0]);
+    }
+
 
 }, 1800);
 
 
 //after searching for id, if the search is successfun we will set the main id to the searched one
+function rechtml(arrmes) {
+    let msgele = document.querySelector('.msgs');
+    let dt = new Date();
+    msgele.insertAdjacentHTML('beforeend', `<p class="msgtex"><---[${dt.getHours()} : ${dt.getMinutes()} : ${dt.getSeconds()}] | ${arrmes}</p>`)
+    
+}
