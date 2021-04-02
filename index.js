@@ -7,26 +7,24 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', router);
-//mongodb stuff
-const { MongoClient } = require("mongodb");
-const uri = 'mongodb://localhost:27017/';
-const client =  new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+const mdbclient = require('./db');
+
+//pinging db from here
 async function run() {
   try {
     // Connect the client to the server
-    await client.connect();
+    await mdbclient.connect();
     // Establish and verify connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Connected successfully to server");
+    await mdbclient.db("admin").command({ ping: 1 });
+    console.log("Connected successfully to server from index.js");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    await mdbclient.close();
   }
 }
 run().catch(console.dir);
+
+
 app.listen(2000, ()=>{
     console.log('listening at port 2000');
 })
