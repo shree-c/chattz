@@ -46,6 +46,7 @@ async function sendid() {
         },
         body : JSON.stringify(obj),
     });
+    console.log(await sendiid.text())
 }
 
 
@@ -56,3 +57,6 @@ setInterval(async ()=>{
     console.log(await posreq.text());
 
 }, 1800);
+
+
+//after searching for id, if the search is successfun we will set the main id to the searched one
