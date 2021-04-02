@@ -1,11 +1,12 @@
 //import circle from "./circle";
 const express = require('express');
 const path = require('path');
-const uniqid = require('uniqid')
 let app = express();
+let router = require('./router');
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', router);
 //mongodb stuff
 const { MongoClient } = require("mongodb");
 const uri = 'mongodb://localhost:27017/';
@@ -26,24 +27,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-//mongodb stuff
-app.post('/hello', (req, res)=>{
-    res.send('hello world');
-    console.log(req.body.msg);
-})
-app.post('/idrec', (req, res)=>{
-    res.send('received id');
-    console.log(req.body.idv);
-})
-app.get('/id', (req, res)=>{
-    res.send(uniqid());
-})
-app.post('/poll', (req, res)=>{
-    console.log('called me');
-    res.send('ok got it')
-})
 app.listen(2000, ()=>{
     console.log('listening at port 2000');
 })
-
