@@ -2,7 +2,7 @@
 let origin = null;
 async function clickhan() {
   let msgele = document.querySelector(".messagebox");
-  console.log(msgele.value);
+ // console.log(msgele.value);
   addhtml(msgele.value);
   let obj = {
     msg: msgele.value,
@@ -74,13 +74,11 @@ setInterval(async () => {
     },
     body: JSON.stringify(obj),
   });
-  const data = await posreq.json();
-  if (!data) {
-    console.log("null");
+  const data = await posreq.text();
+  if (data == null) {
+    console.log("null from poll router")
   } else {
-    data.array.forEach((element) => {
-      rechtml(element);
-    });
+    console.log(`real data: ${data}`)
   }
 }, 1800);
 
