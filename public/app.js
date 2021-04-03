@@ -75,10 +75,18 @@ setInterval(async () => {
     body: JSON.stringify(obj),
   });
   const data = await posreq.text();
+  
   if (data == null) {
     console.log("null from poll router")
   } else {
-    console.log(`real data: ${data}`)
+    let hold = data.slice(2, -2);
+    if (hold.length == 0) {
+      //console.log("null string")
+      ;
+    } else {
+      rechtml(hold);
+      //console.log(hold)
+    }
   }
 }, 1800);
 

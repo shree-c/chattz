@@ -71,21 +71,23 @@ router.post("/poll", (req, res) => {
     if (req.body.who == true) {
         if (global[req.body.idpoll].receiver.length != 0) {
             console.log(global[req.body.idpoll].receiver);
-            res.json({ array: global[req.body.idpoll].receiver });
+            res.send(global[req.body.idpoll].receiver)
+            //res.json({ array: global[req.body.idpoll].receiver });
             global[req.body.idpoll].receiver = [];
         } else {
             res.send(null);
-            console.log('nothing to send');
+//            console.log('nothing to send');
         }
     }
       else if (req.body.who == false) {
         if (global[req.body.idpoll].sender.length != 0) {
             console.log(global[req.body.idpoll].sender);
-            res.json({ array: global[req.body.idpoll].sender });
+            res.send(global[req.body.idpoll].sender)
+            //res.json({ array: global[req.body.idpoll].sender });
             global[req.body.idpoll].sender = [];
         } else {
             res.send(null)
-            console.log('nothing to send');
+ //           console.log('nothing to send');
         }
       }
     } else {
