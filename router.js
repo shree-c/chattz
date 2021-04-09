@@ -2,13 +2,10 @@ const express = require("express");
 const uniqid = require("uniqid");
 const router = express.Router();
 const crud = require("./crud");
-const db = require("./db");
-const date = new Date();
 //new message handeeler
-router.post("/hello", (req, res) => {
-  //  console.log(`got request : ${req.body.sender} and `);
-  //console.log(req.body)
+router.post("/hello", async (req, res) => {
   //I want to create object in the name of id because I want to identify who is the sender
+		await crud.addmessage(req.body.msg, req.body.id, req.body.sender);
   if (!global[req.body.id]) {
     global[req.body.id] = {};
     global[req.body.id].sender = [];
@@ -19,21 +16,14 @@ router.post("/hello", (req, res) => {
       global[req.body.id].receiver.push(req.body.msg);
     }
   } else {
+    //when there is already the object present
     if (req.body.sender == true) {
       global[req.body.id].sender.push(req.body.msg);
     } else {
       global[req.body.id].receiver.push(req.body.msg);
     }
   }
-  res.send("fuck u");
-  // console.log(`${JSON.stringify(global[req.body.id])}`);
-  //I am adding the messages to an array having the id of client as name
-  // if (!global[req.body.id]) {
-  // global[req.body.id] = new array();
-  //     console.log(`${req.body.id}: ${global[req.body.id][0]} new array created`)
-  // }
-  // global[req.body.id].push(req.body.msg);
-  // res.send("ok got the message")
+  res.send("ok got the message");
 });
 //receiving id
 router.post("/idrec", async (req, res) => {
@@ -44,21 +34,22 @@ router.post("/idrec", async (req, res) => {
   } else {
     res.send(false);
   }
-  //console.log(req.body.idv);
 });
 //this is invoked when the client first connects and we push id and its creation timing into the database
 router.get("/id", (req, res) => {
   const id = uniqid();
+	const date = new Date();
   res.send(id);
   let insobj = {
     date: `${date.getHours()} : ${date.getMinutes()} : ${date.getSeconds()}`,
+			day: `${date.getDay()} : ${date.getMonth()} : ${date.getFullYear()}`,
     msgid: id,
   };
   crud.insert(insobj).then((added) => {
     if (added.insertedCount == 1) {
-      //    console.log('successfully added to the db');
+      console.log("successfully added to the db");
     } else {
-      //    console.log('some error in db insertion');
+      console.log("some error in db insertion");
     }
   });
 });
@@ -69,59 +60,28 @@ router.post("/poll", (req, res) => {
   //  console.log(`from poll router: ${JSON.stringify(req.body)}`);
   if (global[req.body.idpoll] != null) {
     if (req.body.who == true) {
-        if (global[req.body.idpoll].receiver.length != 0) {
-            console.log(global[req.body.idpoll].receiver);
-            res.send(global[req.body.idpoll].receiver)
-            //res.json({ array: global[req.body.idpoll].receiver });
-            global[req.body.idpoll].receiver = [];
-        } else {
-            res.send(null);
-//            console.log('nothing to send');
-        }
-    }
-      else if (req.body.who == false) {
-        if (global[req.body.idpoll].sender.length != 0) {
-            console.log(global[req.body.idpoll].sender);
-            res.send(global[req.body.idpoll].sender)
-            //res.json({ array: global[req.body.idpoll].sender });
-            global[req.body.idpoll].sender = [];
-        } else {
-            res.send(null)
- //           console.log('nothing to send');
-        }
+      if (global[req.body.idpoll].receiver.length != 0) {
+        console.log(global[req.body.idpoll].receiver);
+        res.send(global[req.body.idpoll].receiver);
+        //res.json({ array: global[req.body.idpoll].receiver });
+        global[req.body.idpoll].receiver = [];
+      } else {
+        res.send(null);
+        //            console.log('nothing to send');
       }
-    } else {
-        res.send(null)
+    } else if (req.body.who == false) {
+      if (global[req.body.idpoll].sender.length != 0) {
+        console.log(global[req.body.idpoll].sender);
+        res.send(global[req.body.idpoll].sender);
+        //res.json({ array: global[req.body.idpoll].sender });
+        global[req.body.idpoll].sender = [];
+      } else {
+        res.send(null);
+        //           console.log('nothing to send');
+      }
     }
-
-  // if (req.body.who == true) {
-  //     if (global[req.body.idpoll]) {
-  //         if (global[req.body.idpoll].receiver) {
-  //             console.log(global[req.body.idpoll].receiver)
-  //             res.json({array : global[req.body.idpoll].receiver})
-  //             global[req.body.idpoll].receiver  = null;
-  //         }
-  //     }
-  // } else if (req.body.who == false)
-  // {
-  //     if (global[req.body.idpoll]) {
-  //         if (global[req.body.idpoll].sender) {
-  //             res.json({array : global[req.body.idpoll].sender})
-  //             global[req.body.idpoll].sender  = null;
-  //         }
-  //     }
-  // }
-  //res.send(null);
-  //    console.log('called me');
-  //    console.log(`from poll: ${req.body.idpoll} : ${global[req.body.idpoll]}`)
-  // if (global[req.body.idpoll]) {
-  //     if (global[req.body.idpoll].length > 0) {
-  //         console.log(`${global[req.body.idpoll].length} messages pending`)
-  //     }
-  //     res.json({array : global[req.body.idpoll]})
-  //     global[req.body.idpoll] = null;
-
-  // } else
-  // res.send(null)
+  } else {
+    res.send(null);
+  }
 });
 module.exports = router;
