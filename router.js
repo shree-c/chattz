@@ -56,9 +56,19 @@ router.get("/id", (req, res) => {
 //polling : the client sends the post request every 1.5 seconds with its id and if that id has any pending
 // messages we would repond it with messages
 //now the polling happens with who the sender or receiver
-router.post("/poll", (req, res) => {
+router.post("/poll",async (req, res) => {
   //  console.log(`from poll router: ${JSON.stringify(req.body)}`);
-  if (global[req.body.idpoll] != null) {
+		try {
+				const crudres = await	crud.pollsend(req, res);
+				res.send(crudres);
+				await crud.deletestuff(req.body.who, req.body.idpoll)
+		} catch (err) {
+				console.log(err);
+		}
+
+
+//making changes using database stored values
+/*  if (global[req.body.idpoll] != null) {
     if (req.body.who == true) {
       if (global[req.body.idpoll].receiver.length != 0) {
         console.log(global[req.body.idpoll].receiver);
@@ -83,5 +93,6 @@ router.post("/poll", (req, res) => {
   } else {
     res.send(null);
   }
+	*/
 });
 module.exports = router;

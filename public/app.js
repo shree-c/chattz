@@ -74,9 +74,23 @@ setInterval(async () => {
     },
     body: JSON.stringify(obj),
   });
-  const data = await posreq.text();
+  const data = await posreq.json();
+		if (origin) {
+				if (data.receiver) {
+						data.receiver.forEach((value)=>{
+								rechtml(value);
+						})
+				}
+		} else {
+				if (data.sender) {
+						data.sender.forEach((value)=>{
+								rechtml(value);
+						})
+				}
+		}
+								
   
-  if (data == null) {
+  /*if (data == null) {
     console.log("null from poll router")
   } else {
     let hold = data.slice(2, -2);
@@ -87,7 +101,7 @@ setInterval(async () => {
       rechtml(hold);
       //console.log(hold)
     }
-  }
+  } */
 }, 1800);
 
 //after searching for id, if the search is successfun we will set the main id to the searched one
