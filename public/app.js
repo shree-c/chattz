@@ -18,7 +18,6 @@ async function clickhan() {
   });
   let text = await promise.text();
   console.log(text);
-  //promise.then(()=>{console.log(promise.status)});
   msgele.value = "";
 }
 
@@ -27,7 +26,7 @@ function addhtml(str) {
   let dt = new Date();
   msgele.insertAdjacentHTML(
     "beforeend",
-    `<p class="msgtex">--->[${dt.getHours()} : ${dt.getMinutes()} : ${dt.getSeconds()}] | ${str}</p>`
+    `<p class="msgtex">👉 [${dt.getHours()} : ${dt.getMinutes()} : ${dt.getSeconds()}] | ${str}</p>`
   );
 }
 
@@ -88,20 +87,6 @@ setInterval(async () => {
 						})
 				}
 		}
-								
-  
-  /*if (data == null) {
-    console.log("null from poll router")
-  } else {
-    let hold = data.slice(2, -2);
-    if (hold.length == 0) {
-      //console.log("null string")
-      ;
-    } else {
-      rechtml(hold);
-      //console.log(hold)
-    }
-  } */
 }, 1800);
 
 //after searching for id, if the search is successfun we will set the main id to the searched one
@@ -110,6 +95,6 @@ function rechtml(arrmes) {
   let dt = new Date();
   msgele.insertAdjacentHTML(
     "beforeend",
-    `<p class="msgtex"><---[${dt.getHours()} : ${dt.getMinutes()} : ${dt.getSeconds()}] | ${arrmes}</p>`
+  `<p class="msgtex"> 👈 [${dt.getHours()} : ${dt.getMinutes()} : ${dt.getSeconds()}] | ${arrmes}</p>`
   );
 }
