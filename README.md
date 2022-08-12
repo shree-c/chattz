@@ -1,6 +1,7 @@
 # Anonymous messenger
 - Share an id with the person you want to chat with and thats it. Chat seamlessly. :rocket:
-!(preview-page)[/public/assets/chatsprew.png]
+
+![preview-page](/public/assets/chatpre.png)
 
 ## setup
 - add a file config.env at the root
